@@ -1,0 +1,45 @@
+buildscript {
+    repositories {
+        mavenCentral()
+        maven {
+            url = uri("https://plugins.gradle.org/m2/")
+        }
+    }
+}
+
+plugins {
+    id 'java'
+}
+
+group = 'com.paidora'
+version = '1.0-SNAPSHOT'
+
+ext {
+    startTime = new Date()
+    if (!project.hasProperty('artifactsRepositoryUrl')) {
+        artifactsRepositoryUrl = System.getenv('REPOSITORY_URL')
+    }
+    if (!project.hasProperty('artifactsPluginsRepositoryName')) {
+        artifactsPluginsRepositoryName = System.getenv('REPOSITORY_MODULES_NAME')
+    }
+    if (!project.hasProperty('artifactsRepositoryUsername')) {
+        artifactsRepositoryUsername = System.getenv('REPOSITORY_USERNAME')
+    }
+    if (!project.hasProperty('artifactsRepositoryPassword')) {
+        artifactsRepositoryPassword = System.getenv('REPOSITORY_PASSWORD')
+    }
+    getBuildVersion = {
+        if (!project.hasProperty("buildNumber")) {
+            buildNumber = 'local-' + rootProject.startTime.format('MMddHHmmss')
+        }
+        if (buildNumber.startsWith(rootProject.version.toString())) {
+            return buildNumber
+        } else {
+            return rootProject.version + '.' + buildNumber
+        }
+    }
+}
+
+repositories {
+    mavenCentral()
+}

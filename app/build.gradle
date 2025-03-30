@@ -1,0 +1,15 @@
+plugins {
+    id 'java-conventions'
+    id 'dependencies'
+    id 'app'
+}
+repositories {
+    mavenCentral()
+}
+dependencies {
+    internal project(':framework')
+    internal project(':plugins-lib')
+
+    implementation("org.springframework.boot:spring-boot-starter-web:3.4.4")
+    implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.8.6'
+}

@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="GradleSettings">
+    <option name="linkedExternalProjectsSettings">
+      <GradleProjectSettings>
+        <compositeConfiguration>
+          <compositeBuild compositeDefinitionSource="SCRIPT">
+            <builds>
+              <build path="$PROJECT_DIR$/build-conventions" name="build-conventions">
+                <projects>
+                  <project path="$PROJECT_DIR$/build-conventions" />
+                </projects>
+              </build>
+            </builds>
+          </compositeBuild>
+        </compositeConfiguration>
+        <option name="externalProjectPath" value="$PROJECT_DIR$" />
+        <option name="gradleHome" value="" />
+        <option name="modules">
+          <set>
+            <option value="$PROJECT_DIR$" />
+            <option value="$PROJECT_DIR$/app" />
+            <option value="$PROJECT_DIR$/build-conventions" />
+            <option value="$PROJECT_DIR$/framework" />
+            <option value="$PROJECT_DIR$/plugins" />
+            <option value="$PROJECT_DIR$/plugins-lib" />
+            <option value="$PROJECT_DIR$/plugins/foobar" />
+            <option value="$PROJECT_DIR$/plugins/helloworld" />
+          </set>
+        </option>
+      </GradleProjectSettings>
+    </option>
+  </component>
+</project>

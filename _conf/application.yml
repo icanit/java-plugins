@@ -1,0 +1,15 @@
+plugins:
+  update: false
+  repository:
+    type: NEXUS
+    url: http://localhost:8081/
+    name: plugins
+    groupId: com.paidora.modules
+    login: gradle
+    password: overfuck
+  dir: build/artifacts/plugins
+
+plugin:
+  name: foobar
+  params:
+    ignoreCase: true

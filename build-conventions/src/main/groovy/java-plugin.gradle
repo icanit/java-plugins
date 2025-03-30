@@ -1,0 +1,77 @@
+plugins {
+    id 'java-conventions'
+    id 'maven-publish'
+}
+
+def buildVersion = getBuildVersion()
+def artifactGroupId = 'com.paidora.plugins'
+def moduleName = project.name
+def artifactName = moduleName
+
+jar {
+    destinationDirectory.set(layout.buildDirectory.dir("plugins").get())
+
+    group = 'plugins'
+
+    archiveVersion = buildVersion
+    archiveBaseName = artifactName
+
+    manifest {
+        attributes(
+                'Bundle-Version': rootProject.version,
+                'Bundle-Build': buildVersion,
+                'Bundle-Artifact': artifactName,
+                'Bundle-Group': artifactGroupId
+        )
+    }
+}
+
+tasks.register('copyPluginJars', Copy) {
+    dependsOn jar
+    group = 'bundle'
+    into rootProject.layout.buildDirectory.dir("artifacts/plugins")
+    from jar
+    mustRunAfter 'removePluginOldArtifacts'
+}
+
+tasks.register('removePluginOldArtifacts', Delete) {
+    delete fileTree(rootProject.layout.buildDirectory.dir("artifacts/plugins")) {
+        include "$artifactName-*.jar"
+    }
+}
+
+publishing {
+    repositories {
+        maven {
+            name = "paidoraModulesRepository"
+            url = "$artifactsRepositoryUrl" + "$artifactsPluginsRepositoryName/"
+            allowInsecureProtocol = true
+            credentials {
+                username = "$artifactsRepositoryUsername"
+                password = "$artifactsRepositoryPassword"
+            }
+            authentication {
+                basic(BasicAuthentication)
+            }
+        }
+    }
+
+    publications {
+        plugin(MavenPublication) {
+            groupId = artifactGroupId
+            artifact jar
+            artifactId = artifactName
+            version = buildVersion
+        }
+    }
+}
+
+tasks.register('bundlePlugin') {
+    dependsOn = [removePluginOldArtifacts, copyPluginJars]
+    group = 'bundle'
+}
+
+tasks.register('publishPlugin') {
+    dependsOn publish
+    group = 'publishing'
+}

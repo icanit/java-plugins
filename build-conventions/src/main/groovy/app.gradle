@@ -1,0 +1,43 @@
+configurations {
+    impl
+    impl.canBeResolved = true
+    impl.extendsFrom(implementation)
+}
+
+tasks.register('copyJars', Copy) {
+    dependsOn jar
+    group = 'bundle'
+    into rootProject.layout.buildDirectory.dir("artifacts/apps/$project.name/app")
+    from jar
+    mustRunAfter 'removeAppArtifacts'
+}
+
+tasks.register('copyVendor', Copy) {
+    group = 'bundle'
+    into rootProject.layout.buildDirectory.dir("artifacts/apps/vendor")
+    from configurations.impl - configurations.internal
+    mustRunAfter 'removeAppArtifacts'
+}
+
+tasks.register('copyLibs', Copy) {
+    group = 'bundle'
+    into rootProject.layout.buildDirectory.dir("artifacts/apps/$project.name/app/lib")
+    from configurations.internal
+    mustRunAfter 'removeAppArtifacts'
+}
+
+//task copyFiles(dependsOn: [copyJars, copyLibs, copyVendor, copyDockerfile])
+tasks.register('copyFiles') {
+    dependsOn = [copyJars, copyLibs, copyVendor]
+    group = 'bundle'
+}
+
+tasks.register('removeAppArtifacts', Delete) {
+    delete rootProject.layout.buildDirectory.dir("artifacts/apps/$project.name")
+    delete rootProject.layout.buildDirectory.dir("artifacts/apps/vendor")
+}
+
+tasks.register('bundleApp') {
+    dependsOn = [removeAppArtifacts, copyFiles]
+    group = 'bundle'
+}

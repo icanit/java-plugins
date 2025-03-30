@@ -1,0 +1,10 @@
+plugins {
+    id 'java-conventions'
+    id 'dependencies'
+    id 'java-plugin'
+}
+
+dependencies {
+    internal project(':framework')
+    internal project(':plugins-lib')
+}

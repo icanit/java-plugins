@@ -1,0 +1,18 @@
+rootProject.name = 'java-plugins'
+
+includeBuild 'build-conventions'
+
+include 'framework'
+include 'app'
+include 'plugins-lib'
+
+new File(rootDir.path + "/plugins/").traverse(type: groovy.io.FileType.DIRECTORIES) { dir ->
+    def dstr = dir.path
+    if (new File(dstr + "/build.gradle").exists()) {
+        def projectName = 'plugins:plugins-' + dir.name
+        def projectDir = rootDir.relativePath(new File(dstr))
+        include projectName
+        project(":" + projectName).projectDir = file(projectDir)
+    }
+}
+
